@@ -6,19 +6,21 @@
     result))
 
 (define (non-test) '())
-; anything that returns '() within RUN-TESTS is not considered for analysis.
-; NON-TEST is provided as syntactic sugar.
+; anything that returns '() within RUN-TESTS is not considered during analysis.
 
+; remove instances of '() from a list.
 (define (remove-empty result)
   (clean (curry = '()) (cons '() result)))
 
+; print and evaluate arguments
 (define-macro (verbosely)
   (map (fn (L) (println L " ;=> " (eval L)))
-    (args)))
+       (args)))
       
 (define-macro (assert assertion)
   (let (result (eval assertion))
-    (println (if result "PASS" "FAIL") " " assertion " ;=> " result " ")
+    (println (if result "PASS" "FAIL")
+             " " assertion " ;=> " result " ")
     (not (not result)))) ; Force boolean return value to avoid collision during
                          ; analysis with FEATURE, which returns a list, and
                          ; any assertion which would return a list.
@@ -27,7 +29,7 @@
   (println "## Feature: " name)
   (let (result (remove-empty (map eval (args))))  
     (println "Feature `" name "'"
-      (if (passed? result) " passed." " did not pass."))
+             (if (passed? result) " passed." " did not pass."))
     result))
 
 (define-macro (run-tests name)
