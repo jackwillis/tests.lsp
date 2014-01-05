@@ -15,8 +15,7 @@
   (non-test ; non-test code to be run inside run-tests must be specified
     (verbosely ; print and evaluate arguments
       (set 'my-num 9)
-      (set 'my-list '(1 2 3)))
-    '()))
+      (set 'my-list '(1 2 3)))))
 
 ;;;;;;;;
 
