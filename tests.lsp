@@ -1,21 +1,5 @@
-; @module tests.lsp
-
-(define (passed? result) ; takes atom or list
-  (if (list? result)
-    (empty? (clean passed? result))
-    result))
-
-(define (non-test) '())
-; anything that returns '() within RUN-TESTS is not considered during analysis.
-
-; remove instances of '() from a list.
-(define (remove-empty result)
-  (clean (curry = '()) (cons '() result)))
-
-; print and evaluate arguments
-(define-macro (verbosely)
-  (map (fn (L) (println L " ;=> " (eval L)))
-       (args)))
+;; @module tests.lsp
+;; @description unit testing macros in newLISP
       
 (define-macro (assert assertion)
   (let (result (eval assertion))
@@ -47,3 +31,25 @@
         "Complete!"
         "Incomplete.")) 
     result))
+
+; print and evaluate arguments
+(define-macro (verbosely)
+  (map (fn (L) (println L " ;=> " (eval L)))
+       (args)))
+
+;;; supporting functions
+
+; anything that returns '() within RUN-TESTS is not considered during analysis.
+; NON-TEST is syntactic sugar for containing non-test functions.
+(define (non-test) '())
+
+(define (passed? result) ; takes atom or list
+  (if (list? result)
+    (empty? (clean passed? result))
+    result))
+    
+; remove instances of '() from a list.
+(define (remove-empty result)
+  (clean (curry = '()) (cons '() result)))
+  
+; eof
